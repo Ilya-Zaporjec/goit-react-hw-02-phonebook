@@ -3,6 +3,7 @@ import Section from "./Components/Section";
 import Form from "./Components/Form";
 import ContactsList from "./Components/Contacts/ContactsList";
 import ContactFilter from "./Components/Contacts/ContactsFilter";
+import LocalStorage from "./Components/LocalStorage";
 
 const shortid = require("shortid");
 
@@ -58,6 +59,20 @@ export default class App extends Component {
       };
     });
   };
+
+  componentDidMount() {
+    const prevContacts = localStorage.getItem("contacts");
+    if (prevContacts) {
+      this.setState({ contacts: JSON.parse(prevContacts) });
+    }
+  }
+
+  componentDidUpdate(prevState, prevProps) {
+    if (prevState.contacts !== this.state.contacts) {
+      localStorage.setItem("contacts", JSON.stringify(this.state.contacts));
+    }
+  }
+
   render() {
     const { filter } = this.state;
     const drawSearch = this.renderSearch();
